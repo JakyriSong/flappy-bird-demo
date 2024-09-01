@@ -11,13 +11,17 @@ export default class PipePool extends cc.Component {
     game: Game;
     pool: cc.NodePool = null;
 
+    pipeList: cc.Node[] = null;
+
     init(game: Game) {
         this.game = game;
         this.pool = new cc.NodePool();
+        this.pipeList = [];
         let cnt = 5;
         for (let i = 0; i < cnt; i++) {
             let node = cc.instantiate(this.pipePrefab);
             this.pool.put(node);
+            this.pipeList.push(node);
         }
     }
 
@@ -27,6 +31,8 @@ export default class PipePool extends cc.Component {
             pipe = this.pool.get();
         } else {
             pipe = cc.instantiate(this.pipePrefab);
+            this.pool.put(pipe);
+            this.pipeList.push(pipe);
         }
         pipe.getComponent("pipe").init(this.game);
 
@@ -37,5 +43,10 @@ export default class PipePool extends cc.Component {
         this.pool.put(pipe);
     }
 
+    reset() {
+        this.pipeList.forEach(node => {
+            this.revert(node);
+        })
+    }
     
 }

@@ -1,4 +1,5 @@
 import Game from "./game";
+import { PlayMode } from './enums';
 
 const {ccclass, property} = cc._decorator;
 
@@ -8,25 +9,32 @@ export default class Bird extends cc.Component {
 
     jumpHeight: number;
     jumpDuration: number;
+    visibleHeight: number;
+    birdHeight: number;
+    beginY: number;
 
     onLoad () {
-        this.jumpHeight = this.node.height * this.node.scaleY / 2;
+        this.birdHeight = this.node.height * this.node.scaleY;
+        this.jumpHeight = this.birdHeight / 2;
+        this.jumpDuration = 0.03;
+        this.visibleHeight = cc.view.getVisibleSize().height;
+        this.beginY = this.node.y;
         cc.log("jumpHeight=", this.jumpHeight);
         cc.log("bird height=", this.node.height, "scaleY=", this.node.scaleY);
-        this.jumpDuration = 0.05;
+        cc.log("bird y=", this.node.y);
+        cc.log("visable height=", this.visibleHeight);
     }
-
-    start () {
-
-    }
-
-    // update (dt) {}
 
     flyUp() {
         cc.Tween.stopAllByTarget(this.node);
+        let targetY = this.node.y + this.jumpHeight;
+        // 边界判断
+        if (this.node.y + this.jumpHeight >= this.visibleHeight - this.birdHeight / 2) {
+            targetY = this.visibleHeight - this.birdHeight / 2
+        }
         cc.tween(this.node)
             .to(this.jumpDuration, { angle: 30 }, { easing: 'sineOut' })
-            .to(this.jumpDuration, { position: cc.v2(this.node.x, this.node.y + this.jumpHeight) }, { easing: 'sineOut' })
+            .to(this.jumpDuration, { position: cc.v2(this.node.x, targetY) }, { easing: 'sineOut' })
             .to(this.jumpDuration, { angle: 0 }, { easing: 'sineIn' })
             .start();
     }
@@ -47,5 +55,13 @@ export default class Bird extends cc.Component {
 
     init (game: Game) {
         this.game = game;
+    }
+
+    reset() {
+        const body = this.node.getComponent(cc.RigidBody);
+        body.type = cc.RigidBodyType.Static;
+        this.node.angle = 0;
+        this.node.y = this.beginY;
+        body.type = cc.RigidBodyType.Dynamic;
     }
 }

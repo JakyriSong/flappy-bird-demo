@@ -18,25 +18,24 @@ export default class Pipe extends cc.Component {
     @property(cc.Sprite)
     bottomPipe: cc.Sprite = null;
 
-
-    // onLoad () {}
-
-    start () {
-
-    }
-
     update (dt) {
         let speed = this.game.speed * dt
         this.node.x -= speed;
 
         if (this.node.x < -500) {
-            cc.log("revert and create");
+            cc.log("revert pipe");
             this.game.pipePool.revert(this.node);
         }
         if (!this.hasNext && this.game.pipeBeginPosX - this.node.x > this.game.interval) {
             cc.log("create pipe");
             this.game.createPipe();
             this.hasNext = true;
+        }
+
+        if (!this.isPass && this.game.bird.node.x > this.node.x) {
+            cc.log("pipe:", this.game.bird.node.x, this.node.x);
+            this.isPass = true;
+            this.game.addScore();
         }
 
     }
