@@ -11,9 +11,9 @@ const {ccclass, property} = cc._decorator;
 const SettingMap: Map<Difficulty, [number, number]> = new Map<Difficulty, [number, number]>(
     [
         // intvervalStep, 
-        [Difficulty.Easy, [4, 256]],
-        [Difficulty.Medium, [3, 192]],
-        [Difficulty.Hard, [2, 128]]
+        [Difficulty.Practice, [70, 0]],
+        [Difficulty.Easy, [70, 256]],
+        [Difficulty.Hard, [100, 128]]
     ]
 );
 
@@ -40,22 +40,31 @@ export default class Game extends cc.Component {
     pipe: cc.Node[] = [];
 
     canvasHeight: number;
+    canvasWidth: number;
 
-    gravity: cc.Vec2 = cc.v2(0, -100);
-    maxSpeed: number = 200;
-    initSpeed: number = 150;
-    speed: number = 150;
+    pipeBeginPosX: number;
+    intervalBase: number;
+    intervalOffset: number;
+    interval: number;
+
+    gravity: cc.Vec2 = cc.v2(0, -15);
+
+    maxSpeed: number = 150;
+    initSpeed: number;
+    speed: number;
     speedStep: number = 2;
-    intervalBase: number = 384;
-    intervalOffset: number = 192;
-    pipeBeginPosX: number = 768;
-    interval: number = this.intervalBase;
+
     isOver: boolean = false;
     playMode: PlayMode;
     difficulty: Difficulty;
 
     onLoad () {
         this.canvasHeight = cc.Canvas.instance.node.height;
+        this.canvasWidth = cc.Canvas.instance.node.width;
+        this.pipeBeginPosX = this.canvasWidth / 1.5 ;
+        this.intervalBase = this.canvasWidth/3;
+
+        this.loadSetting();
 
         this.ground.init(this);
 
@@ -72,7 +81,6 @@ export default class Game extends cc.Component {
 
     onEnable() {
         cc.log("Game scene enabled");
-        this.loadSetting();
         this.initPhysicsManager();
         this.initListener();
         cc.log("isPaused", cc.director.isPaused());
@@ -82,11 +90,11 @@ export default class Game extends cc.Component {
         let settingData = SettingData.getInstance();
         this.playMode = settingData.playMode;
         this.difficulty = settingData.difficulty;
-        [this.speedStep, this.intervalOffset] = SettingMap.get(this.difficulty);
+        [this.initSpeed, this.intervalOffset] = SettingMap.get(this.difficulty);
+        this.speed = this.initSpeed;
         this.interval = this.intervalBase + this.intervalOffset;
         cc.log("[game] playMode", settingData.playMode, typeof(settingData.playMode));
         cc.log("[game] difficulty", settingData.difficulty, typeof(settingData.difficulty));
-        cc.log("[game]", this.interval);
         cc.log("[game] interval", this.interval);
 
     }
@@ -96,9 +104,13 @@ export default class Game extends cc.Component {
     }
 
     pauseGame() {
-        this.bntPause.node.active = false;
-        this.bntResume.node.active = true;
-        cc.director.pause();
+        if (this.difficulty == Difficulty.Practice) {
+            this.gameOver();
+        } else {
+            this.bntPause.node.active = false;
+            this.bntResume.node.active = true;
+            cc.director.pause();
+        }
     }
     
     resumeGame() {
@@ -111,16 +123,18 @@ export default class Game extends cc.Component {
         this.isOver = false;
         this.bntPause.node.active = true;
         this.bntResume.node.active = false;
-        this.createPipe();
+        if (this.difficulty != Difficulty.Practice) {
+            this.createPipe();
+        }
         cc.log("starGame", cc.director.isPaused());
         if (cc.director.isPaused())
             cc.director.resume();
     }
 
     restartGame() {
-        this.bird.reset();
         this.pipePool.reset();
         this.score.reset();
+        this.bird.reset();
         this.startGame();
     }
 
@@ -132,6 +146,8 @@ export default class Game extends cc.Component {
 
     gameOver() {
         this.isOver = true;
+        this.bntPause.node.active = false;
+        this.bntResume.node.active = false;
         cc.log("speed", this.speed);
         cc.log("Game Over!");
         this.score.showScoreBoard();
@@ -160,18 +176,21 @@ export default class Game extends cc.Component {
     initListener() {
         cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, (event: cc.Event.EventKeyboard) => {
             if (this.isOver) return;
+            const body = this.bird.getComponent(cc.RigidBody);
             switch (event.keyCode) {
                 case cc.macro.KEY.w:
                 case cc.macro.KEY.up:
-                    const body = this.bird.getComponent(cc.RigidBody);
                     body.type = cc.RigidBodyType.Static;
                     this.bird.flyUp();
                     body.type = cc.RigidBodyType.Dynamic;
                     break;
                 case cc.macro.KEY.s:
                 case cc.macro.KEY.down:
-                    if (this.playMode == PlayMode.TwoPlayer)
+                    if (this.playMode == PlayMode.TwoPlayer){
+                        body.type = cc.RigidBodyType.Static;
                         this.bird.flyDown();
+                        body.type = cc.RigidBodyType.Dynamic;
+                    }
                     break;
             }
         })
@@ -180,7 +199,7 @@ export default class Game extends cc.Component {
     addScore() {
         cc.log("score + 1");
         this.score.addScore();
-        this.speed = Math.min(this.initSpeed + Math.floor(this.score.score / this.speedStep), this.maxSpeed);
+        this.speed = Math.min(this.initSpeed + (this.score.score * this.speedStep), this.maxSpeed);
         cc.log("speed", this.speed);
     }
 

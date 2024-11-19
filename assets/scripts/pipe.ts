@@ -22,7 +22,7 @@ export default class Pipe extends cc.Component {
         let speed = this.game.speed * dt
         this.node.x -= speed;
 
-        if (this.node.x < -500) {
+        if (this.node.x < -(this.game.canvasWidth + 100)) {
             cc.log("revert pipe");
             this.game.pipePool.revert(this.node);
         }

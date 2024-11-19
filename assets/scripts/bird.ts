@@ -15,9 +15,9 @@ export default class Bird extends cc.Component {
 
     onLoad () {
         this.birdHeight = this.node.height * this.node.scaleY;
-        this.jumpHeight = this.birdHeight / 2;
+        this.jumpHeight = this.birdHeight;
         this.jumpDuration = 0.03;
-        this.visibleHeight = cc.view.getVisibleSize().height;
+        this.visibleHeight = cc.view.getVisibleSize().height / 2;
         this.beginY = this.node.y;
         cc.log("jumpHeight=", this.jumpHeight);
         cc.log("bird height=", this.node.height, "scaleY=", this.node.scaleY);
@@ -37,6 +37,7 @@ export default class Bird extends cc.Component {
             .to(this.jumpDuration, { position: cc.v2(this.node.x, targetY) }, { easing: 'sineOut' })
             .to(this.jumpDuration, { angle: 0 }, { easing: 'sineIn' })
             .start();
+        cc.log("flyUp bird position y", this.node.y);
     }
 
     flyDown() {
@@ -46,6 +47,7 @@ export default class Bird extends cc.Component {
             .to(this.jumpDuration, { position: cc.v2(this.node.x, this.node.y - this.jumpHeight) }, { easing: 'sineOut' })
             .to(this.jumpDuration, { angle: 0 }, { easing: 'sineOut' })
             .start();
+        cc.log("flyDown bird position y", this.node.y);
     }
 
 
@@ -60,8 +62,9 @@ export default class Bird extends cc.Component {
     reset() {
         const body = this.node.getComponent(cc.RigidBody);
         body.type = cc.RigidBodyType.Static;
-        this.node.angle = 0;
-        this.node.y = this.beginY;
+        cc.tween(this.node)
+            .to(this.jumpDuration, { position: cc.v2(this.node.x, this.beginY) }, { easing: 'sineOut' })
+            .start();
         body.type = cc.RigidBodyType.Dynamic;
     }
 }

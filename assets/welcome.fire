@@ -100,8 +100,8 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 768,
-      "height": 896
+      "width": 1536,
+      "height": 1344
     },
     "_anchorPoint": {
       "__type__": "cc.Vec2",
@@ -156,7 +156,7 @@
       "__uuid__": "4ebce09d-6454-4918-85af-caae3310ee74"
     },
     "_type": 0,
-    "_sizeMode": 1,
+    "_sizeMode": 0,
     "_fillType": 0,
     "_fillCenter": {
       "__type__": "cc.Vec2",
@@ -207,7 +207,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 768,
+      "width": 1536,
       "height": 850
     },
     "_anchorPoint": {
@@ -219,7 +219,7 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        384,
+        768,
         425,
         0,
         0,
@@ -388,8 +388,8 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        -128,
-        87,
+        -512,
+        64,
         0,
         0,
         0,
@@ -518,7 +518,7 @@
     "_enabled": true,
     "_designResolution": {
       "__type__": "cc.Size",
-      "width": 768,
+      "width": 1536,
       "height": 850
     },
     "_fitWidth": true,
@@ -672,7 +672,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 768,
+      "width": 1536,
       "height": 128
     },
     "_anchorPoint": {
@@ -752,12 +752,12 @@
     "tag": 0,
     "_offset": {
       "__type__": "cc.Vec2",
-      "x": 384,
+      "x": 768,
       "y": 64
     },
     "_size": {
       "__type__": "cc.Size",
-      "width": 768,
+      "width": 1536,
       "height": 128
     },
     "_id": "f49EYO83pH5oh2GdVmahkf"
@@ -790,7 +790,7 @@
     },
     "_contentSize": {
       "__type__": "cc.Size",
-      "width": 768,
+      "width": 1536,
       "height": 128
     },
     "_anchorPoint": {
@@ -802,7 +802,7 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        768,
+        1536,
         0,
         0,
         0,
@@ -870,12 +870,12 @@
     "tag": 0,
     "_offset": {
       "__type__": "cc.Vec2",
-      "x": 384,
+      "x": 768,
       "y": 64
     },
     "_size": {
       "__type__": "cc.Size",
-      "width": 768,
+      "width": 1536,
       "height": 128
     },
     "_id": "380R4lP01IhIQ8NBxPgfMa"
@@ -921,7 +921,7 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        384,
+        768,
         720,
         0,
         0,
@@ -1118,15 +1118,15 @@
       "__type__": "TypedArray",
       "ctor": "Float64Array",
       "array": [
-        384,
+        768,
         264,
         0,
         0,
         0,
         0,
         1,
-        1,
-        1,
+        1.5,
+        1.5,
         1
       ]
     },
@@ -2052,7 +2052,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "easy",
+    "_name": "practice",
     "_objFlags": 0,
     "_parent": {
       "__id__": 45
@@ -2262,9 +2262,9 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_string": "easy",
-    "_N$string": "easy",
-    "_fontSize": 25,
+    "_string": "practice",
+    "_N$string": "practice",
+    "_fontSize": 21,
     "_lineHeight": 40,
     "_enableWrapText": false,
     "_N$file": {
@@ -2435,11 +2435,11 @@
     "component": "",
     "_componentId": "aea60bRF6hMOr82hOCxSaKp",
     "handler": "setDifficulty",
-    "customEventData": "1"
+    "customEventData": "0"
   },
   {
     "__type__": "cc.Node",
-    "_name": "medium",
+    "_name": "easy",
     "_objFlags": 0,
     "_parent": {
       "__id__": 45
@@ -2649,8 +2649,8 @@
     ],
     "_srcBlendFactor": 770,
     "_dstBlendFactor": 771,
-    "_string": "medium",
-    "_N$string": "medium",
+    "_string": "easy",
+    "_N$string": "easy",
     "_fontSize": 25,
     "_lineHeight": 40,
     "_enableWrapText": false,
@@ -2822,7 +2822,7 @@
     "component": "",
     "_componentId": "aea60bRF6hMOr82hOCxSaKp",
     "handler": "setDifficulty",
-    "customEventData": "2"
+    "customEventData": "1"
   },
   {
     "__type__": "cc.Node",
@@ -3209,7 +3209,7 @@
     "component": "",
     "_componentId": "aea60bRF6hMOr82hOCxSaKp",
     "handler": "setDifficulty",
-    "customEventData": "3"
+    "customEventData": "2"
   },
   {
     "__type__": "cc.Node",
