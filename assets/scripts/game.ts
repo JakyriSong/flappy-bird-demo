@@ -10,10 +10,10 @@ const {ccclass, property} = cc._decorator;
 
 const SettingMap: Map<Difficulty, [number, number]> = new Map<Difficulty, [number, number]>(
     [
-        // intvervalStep, 
-        [Difficulty.Practice, [70, 0]],
-        [Difficulty.Easy, [70, 256]],
-        [Difficulty.Hard, [100, 128]]
+        // speed, interval
+        [Difficulty.Practice, [50, 0]],
+        [Difficulty.Easy, [50, 256]],
+        [Difficulty.Hard, [80, 128]]
     ]
 );
 
@@ -47,7 +47,7 @@ export default class Game extends cc.Component {
     intervalOffset: number;
     interval: number;
 
-    gravity: cc.Vec2 = cc.v2(0, -15);
+    gravity: cc.Vec2 = cc.v2(0, -8);
 
     maxSpeed: number = 150;
     initSpeed: number;

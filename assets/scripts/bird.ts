@@ -15,7 +15,7 @@ export default class Bird extends cc.Component {
 
     onLoad () {
         this.birdHeight = this.node.height * this.node.scaleY;
-        this.jumpHeight = this.birdHeight;
+        this.jumpHeight = this.birdHeight * 1.5;
         this.jumpDuration = 0.03;
         this.visibleHeight = cc.view.getVisibleSize().height / 2;
         this.beginY = this.node.y;

@@ -54,7 +54,7 @@ export default class Pipe extends cc.Component {
         let groundHeight = this.game.ground.node.height;
         let y = canvasHeight / 2 - groundHeight;
 
-        let gap = random(200, 250);
+        let gap = random(250, 300);
         let topHeight = random(10, 20);
         topHeight *= topHeight;
 
