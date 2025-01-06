@@ -55,6 +55,8 @@ export default class Game extends cc.Component {
     speedStep: number = 2;
 
     isOver: boolean = false;
+    playerName: String;
+    startTime: number;
     playMode: PlayMode;
     difficulty: Difficulty;
 
@@ -88,6 +90,8 @@ export default class Game extends cc.Component {
 
     loadSetting() {
         let settingData = SettingData.getInstance();
+        this.playerName = settingData.playerName;
+        this.startTime = settingData.startTime;
         this.playMode = settingData.playMode;
         this.difficulty = settingData.difficulty;
         [this.initSpeed, this.intervalOffset] = SettingMap.get(this.difficulty);
@@ -132,10 +136,44 @@ export default class Game extends cc.Component {
     }
 
     restartGame() {
+        cc.log("is native", cc.sys.isNative);
+        if (cc.sys.isNative && this.difficulty != Difficulty.Practice) {
+            this.writeFile();
+        }
         this.pipePool.reset();
         this.score.reset();
         this.bird.reset();
         this.startGame();
+    }
+
+    writeFile() {
+        const filePath = jsb.fileUtils.getWritablePath()
+            + this.playerName + "_" + this.startTime.toString() + ".txt";
+        let content = '';
+        if (jsb.fileUtils.isFileExist(filePath)) {
+            content = jsb.fileUtils.getStringFromFile(filePath);
+        }
+
+        let scores = [];
+        let maxScore = 0;
+        const lines = content.split("\n");
+        for (let i = 1; i < lines.length; i++) {
+            if (lines[i]) {
+                scores.push(parseInt(lines[i], 10));
+            }
+        }
+        scores.push(this.score.score);
+        for (let i = 0; i < scores.length; i++) {
+            if (scores[i] > maxScore) {
+                maxScore = scores[i];
+            }
+        }
+        let writeContent = `ID: ${this.playerName}\tTimes: ${scores.length}\tMax: ${maxScore}\n`;
+        scores.forEach(score => {
+            writeContent += `${score}\n`;
+        });
+        jsb.fileUtils.writeStringToFile(writeContent, filePath);
+        cc.log("game data updated to :", filePath);
     }
 
     backToMenu() {

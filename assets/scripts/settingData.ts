@@ -5,7 +5,8 @@ const {ccclass, property} = cc._decorator;
 export default class SettingData extends cc.Component {
     static _instance: SettingData = null;
 
-    preMode: PlayMode;
+    playerName: String;
+    startTime: number;
     playMode: PlayMode;
     difficulty: Difficulty;
     maxScore: number;
@@ -18,6 +19,8 @@ export default class SettingData extends cc.Component {
 
         SettingData._instance = this;
         this.maxScore = 0;
+        this.playerName = "DEFAULT";
+        this.startTime = Date.now();
         this.playMode = PlayMode.TwoPlayer;
         this.difficulty = Difficulty.Easy;
         cc.game.addPersistRootNode(this.node);
